@@ -11,7 +11,10 @@ public class MoveObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (OVRInput.GetDown(OVRInput.RawButton.A))
+        {
+            Debug.Log("VICTORy");
+        }
         if (hasMoved)
             CubeRobotTransform.position = CubeRobotTransform.position + (transform.position - lastPosition) * SpeedMove;
         else
