@@ -8,6 +8,8 @@ public class TestTranspChange : MonoBehaviour
     float boundaryScale = 10f;
     [SerializeField]
     Color boundaryColor = Color.blue;
+    [SerializeField]
+    AnimationCurve alphaCurve;
 
     [Header("Robot cube controller to set boundary center")]
     [SerializeField]
@@ -25,7 +27,8 @@ public class TestTranspChange : MonoBehaviour
     }
     private void Update()
     {
-        float alpha = (CubeController.transform.position - boundaryCenter).magnitude / boundaryRadius;
+        float normalizedDistance = Mathf.Clamp01((CubeController.transform.position - boundaryCenter).magnitude / boundaryRadius);
+        float alpha = alphaCurve.Evaluate(normalizedDistance);
         bRenderer.material.color = new Color(boundaryColor.r, boundaryColor.g, boundaryColor.b, alpha);
     }
 
