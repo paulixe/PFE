@@ -17,7 +17,7 @@ public class Robot : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)|| OVRInput.GetDown(OVRInput.RawButton.A))
         {
             if (isGrabbing)
                 Ungrab();
@@ -31,7 +31,7 @@ public class Robot : MonoBehaviour
 
         if (isGrabbing)
         {
-            TooltipText.text = "Press B to ungrab";
+            TooltipText.text = "Press A to ungrab";
         }
         else
         {

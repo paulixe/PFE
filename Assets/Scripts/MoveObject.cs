@@ -8,14 +8,13 @@ public class MoveObject : MonoBehaviour
     public Vector3 lastPosition;
     public float SpeedMove;
     bool hasMoved;
+    bool isMoveModeOn;
     // Update is called once per frame
     void Update()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.A))
-        {
-            Debug.Log("VICTORy");
-        }
-        if (hasMoved)
+        isMoveModeOn = OVRInput.Get(OVRInput.RawButton.RIndexTrigger);
+
+        if (hasMoved&& isMoveModeOn)
             CubeRobotTransform.position = CubeRobotTransform.position + (transform.position - lastPosition) * SpeedMove;
         else
             hasMoved = lastPosition != transform.position;

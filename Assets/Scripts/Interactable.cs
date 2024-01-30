@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Interactable : MonoBehaviour
 {
     public Material GrabbedMaterial;
@@ -31,7 +32,7 @@ public class Interactable : MonoBehaviour
         else
             mats.Add(defaultMaterial);
 
-        if (isGrabbed)
+        if (isGrabbed&&GrabbedMaterial!=null)
             mats.Add(GrabbedMaterial);
 
         meshRenderer.SetMaterials(mats);

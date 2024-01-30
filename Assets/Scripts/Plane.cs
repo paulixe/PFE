@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plane : MonoBehaviour, IIdentifiable
+public class Plane : MonoBehaviour
 {
-    public string TargetCubeId;
+    public GameObject TargetCube;
 
 
 
@@ -18,7 +18,6 @@ public class Plane : MonoBehaviour, IIdentifiable
     Vector3 unactivatedPosition;
     Vector3 activatedPosition => unactivatedPosition + Vector3.down * transform.localScale.y * 0.25f;
 
-    public string GetId() => "Plane for " + TargetCubeId;
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
@@ -33,17 +32,21 @@ public class Plane : MonoBehaviour, IIdentifiable
     {
         if (IsTargetCube(collider))
         {
-            HasRightCubeOnIt = true;
-            RefreshVisual();
+            DetectedCube();
         }
     }
     private void OnTriggerStay(Collider collider)
     {
         if (IsTargetCube(collider))
         {
-            HasRightCubeOnIt = true;
-            RefreshVisual();
+            DetectedCube();
         }
+    }
+    void DetectedCube()
+    {
+        HasRightCubeOnIt = true;
+        RefreshVisual();
+        GameManager.PlanesActivated?.Invoke(this);
     }
     private void OnTriggerExit(Collider collider)
     {
@@ -51,6 +54,7 @@ public class Plane : MonoBehaviour, IIdentifiable
         {
             HasRightCubeOnIt = false;
             RefreshVisual();
+            GameManager.PlanesOff?.Invoke(this);
         }
     }
     private void RefreshVisual()
@@ -70,10 +74,6 @@ public class Plane : MonoBehaviour, IIdentifiable
     }
     private bool IsTargetCube(Collider collider)
     {
-        if (collider.gameObject.TryGetComponent<Cube>(out Cube cube))
-        {
-            return cube.GetId() == TargetCubeId;
-        }
-        return false;
+        return collider.gameObject == TargetCube;
     }
 }
