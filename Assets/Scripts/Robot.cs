@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Robot : MonoBehaviour
 {
     public LayerMask InteractableLayer;
+    public GameObject TooltipCanvas;
+    public Text TooltipText;
 
     private FixedJoint joint;
     private Interactable interactableInContact;
@@ -23,6 +25,20 @@ public class Robot : MonoBehaviour
                 Grab();
         }
     }
+    private void RefreshTooltipState()
+    {
+        TooltipCanvas.SetActive(interactableInContact != null);
+
+        if (isGrabbing)
+        {
+            TooltipText.text = "Press B to ungrab";
+        }
+        else
+        {
+            TooltipText.text = "Press A to grab";
+
+        }
+    }
     private void OnTriggerEnter(Collider collider)
     {
         if (TryGetInteractable(collider, out Interactable interactable))
@@ -32,6 +48,7 @@ public class Robot : MonoBehaviour
                 interactable.SetOn();
                 interactableInContact = interactable;
             }
+            RefreshTooltipState();
         }
     }
     private void OnTriggerStay(Collider collider)
@@ -43,6 +60,7 @@ public class Robot : MonoBehaviour
                 interactable.SetOn();
                 interactableInContact = interactable;
             }
+            RefreshTooltipState();
         }
     }
     private void OnTriggerExit(Collider collider)
@@ -54,6 +72,7 @@ public class Robot : MonoBehaviour
                 interactable.SetOff();
                 interactableInContact = null;
             }
+            RefreshTooltipState();
         }
     }
     private bool TryGetInteractable(Collider collider, out Interactable interactable)
