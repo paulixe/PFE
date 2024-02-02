@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UI;
 public class Robot : MonoBehaviour
@@ -11,6 +10,8 @@ public class Robot : MonoBehaviour
     private FixedJoint joint;
     private Interactable interactableInContact;
     private bool isGrabbing = false;
+
+    bool isInContact => interactableInContact != null;
     private void Awake()
     {
         joint = GetComponent<FixedJoint>();
@@ -27,17 +28,19 @@ public class Robot : MonoBehaviour
     }
     private void RefreshTooltipState()
     {
-        TooltipCanvas.SetActive(interactableInContact != null);
-
         if (isGrabbing)
         {
-            TooltipText.text = "Press A to ungrab";
+            ChangeTooltip("Press A to ungrab", isInContact);
         }
         else
         {
-            TooltipText.text = "Press A to grab";
-
+            ChangeTooltip("Press A to grab", isInContact);
         }
+    }
+    public void ChangeTooltip(string text,bool setActive=true)
+    {
+        TooltipCanvas.SetActive(setActive);
+        TooltipText.text = text;
     }
     private void OnTriggerEnter(Collider collider)
     {
@@ -69,8 +72,10 @@ public class Robot : MonoBehaviour
         {
             if (interactableInContact == interactable)
             {
+                Ungrab();
                 interactable.SetOff();
                 interactableInContact = null;
+
             }
             RefreshTooltipState();
         }

@@ -10,7 +10,7 @@ public class LookAtCamera : MonoBehaviour
     {
         // Trouver la caméra principale
         mainCamera = Camera.main;
-    }//
+    }
 
     private void Update()
     {

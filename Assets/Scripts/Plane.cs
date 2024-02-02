@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Plane : MonoBehaviour
 {
+    public string ColorExpected;
     public GameObject TargetCube;
-
+    public GameObject TooltipCanvas;
+    public Text TooltipText;
 
 
     [HideInInspector]
@@ -35,6 +37,11 @@ public class Plane : MonoBehaviour
             DetectedCube();
         }
     }
+    public void ChangeTooltip(string text, bool setActive = true)
+    {
+        TooltipCanvas.SetActive(setActive);
+        TooltipText.text = text;
+    }
     private void OnTriggerStay(Collider collider)
     {
         if (IsTargetCube(collider))
@@ -54,6 +61,7 @@ public class Plane : MonoBehaviour
         {
             HasRightCubeOnIt = false;
             RefreshVisual();
+
             GameManager.PlanesOff?.Invoke(this);
         }
     }
